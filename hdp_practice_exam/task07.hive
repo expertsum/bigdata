@@ -1,0 +1,14 @@
+create table if not exists sfo_weather (
+	station_name string,
+	Year int,
+	Month int,
+	DayOfMonth int,
+	precipitation int,
+	temperature_max int,
+	temperature_min int
+)
+stored as orc;
+
+-- Doesn't work. Cannot load text file into orc table with a load statement
+--load data local inpath '/home/horton/datasets/flightdelays/sfo_weather.csv' into table sfo_weather;
+

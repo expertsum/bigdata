@@ -1,0 +1,7 @@
+hadoop fs -mkdir /user/horton/weather
+hadoop fs -put /home/horton/datasets/flightdelays/sfo_weather.csv /user/horton/weather
+
+sqoop-list-tables --connect jdbc:mysql://namenode:3306/flightinfo --username root --password hadoop
+sqoop-eval --connect jdbc:mysql://namenode:3306/flightinfo --username root --password hadoop -e "select * from weather limit 10"
+
+sqoop-export --connect jdbc:mysql://namenode:3306/flightinfo --username root --password hadoop --export-dir /user/horton/weather --table weather --validate

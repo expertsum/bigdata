@@ -1,0 +1,119 @@
+Task 1:
+hadoop fs -mkdir flightdelays
+hadoop fs -put ~/datasets/flightdelays/*.csv flightdelays/
+
+
+
+Task 2:
+a = load 'flightdelays' using PigStorage(',');
+b = filter a by (chararray) $4 != 'NA' or (chararray) $11 != 'NA';
+c = foreach b generate $0 as year:int, $1 as month:int, $2 as dayofmonth:int, $4 as deptime:int, 
+$8 as uniquecarrier:chararray, $9 as flightnum:chararray, $14 as arrdelay:int, 
+$16 as origin:chararray, $17 as dest:chararray;
+store c into '/user/horton/flightdelays_clean' using PigStorage(',');
+
+
+
+Task 3:
+Step 1.
+a = load 'flightdelays_clean';
+b = group a all;
+c = foreach b generate COUNT(a);
+store c into 'cleaned_total';
+
+The result is 30,267 records
+
+Step 2.
+a = load 'flightdelays_clean' using PigStorage(',');
+b = filter a by (chararray) $8 == 'DEN';
+c = group b all;
+d = foreach c generate COUNT(b);
+store d into '/user/horton/denver_total';
+
+The result is 495 records
+
+
+Step 3.
+a = load 'flightdelays_clean' using PigStorage(',');
+b = filter a by (chararray) $8 == 'DEN' and (int) $6 >= 60;
+c = group b all;
+d = foreach c generate COUNT(b);
+store d into '/user/horton/denver_late';
+
+The result is 29 records
+
+
+
+
+Task 4:
+create external table flightdelays (
+year int, 
+month int, 
+dayofmonth int, 
+deptime int, 
+uniquecarrier string, 
+flightnum int, 
+arrdelay int, 
+origin string, 
+dest string) 
+row format delimited 
+fields terminated by ',' 
+location '/user/horton/flightdelays_clean';
+
+
+
+
+Task 5:
+a = load 'flightdelays' using org.apache.hive.hcatalog.pig.HCatLoader();
+b = filter a by arrdelay > 0;
+c = order b by arrdelay desc parallel 3;
+store c into '/user/horton/flightdelays_nonzero' using PigStorage(',');
+
+Run the script with the following command:
+$ pig -x tez -useHCatalog flightdelays_nonzero.pig
+
+The output should consist of 13,265 records stored in three files:
+-rw-r--r--   3 horton horton     123265   flightdelays_nonzero/part-v003-o000-r-00000
+-rw-r--r--   3 horton horton     179581   flightdelays_nonzero/part-v003-o000-r-00001
+-rw-r--r--   3 horton horton     123013   flightdelays_nonzero/part-v003-o000-r-00002
+
+
+
+Task 6:
+Step 1.
+select avg(arrdelay) from flightdelays where dest = 'DEN';
+Result is 7.26 minutes
+
+Step 2.
+select avg(arrdelay) from flightdelays where origin = 'LAX' and dest = 'SFO';
+Result is 62.5 minutes
+
+Step 3.
+from flightdelays select dest, avg(arrdelay) as delay group by dest order by delay asc;
+NOTE: There are many ways to find the highest arrdelay, but the answer is "SFO" with a value of about 55 minutes
+
+
+
+Task 7:
+create table sfo_weather_text (station_name string, year int, month int, dayofmonth int, precipitation int, temperature_max int, temperature_min int) row format delimited fields terminated by ',';
+load data local inpath '/home/horton/datasets/flightdelays/sfo_weather.csv' into table sfo_weather_text;
+create table sfo_weather stored as Orc as select * from sfo_weather_text;
+
+
+
+Task 8:
+set hive.execution.engine=tez;
+create table flights_weather as select f.*, w.temperature_max, w.temperature_min from flightdelays as f  join sfo_weather as w on w.year = f.year and  w.month = f.month and  w.dayofmonth = f.dayofmonth where f.origin = "SFO" or f.dest = "SFO" ;
+
+The flights_weather table should contain 416 rows
+
+
+
+Task 9:
+create table weather_partitioned (station_name string, dayofmonth int, precipipation int, temperature_max int, temperature_min int) partitioned by (year int, month int) stored as orc;
+insert into table weather_partitioned partition(year=2008,month=1) select station_name, dayofmonth, precipitation, temperature_max, temperature_min from sfo_weather where year = 2008 and month = 1;
+
+
+
+Task 10:
+sqoop export --connect jdbc:mysql://namenode/flightinfo --table weather  --export-dir /user/horton/weather --input-fields-terminated-by ',' --username root --password hadoop

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Exam Tasks</title>
+       
+        <link rel="stylesheet" href=".main.css">
+    </head>
+    <body>
+        
+        <h1>TASK 01</h1>
+        <h2>Import a File into HDFS</h2>
+        
+        <ol>
+            <li>
+                Create a new directory in HDFS named <code>/user/horton/flightdelays</code>
+            </li>
+            <li>
+                Put the three files from the <code>/home/horton/datasets/flightdelays</code> directory on the local machine into the <code>/user/horton/flightdelays</code> directory in HDFS
+            </li>
+        </ol>
+
+        
+        <h1>TASK 02</h1>
+        <h2>Cleanse Data using Pig</h2>
+        
+        <ol>
+            <li>
+                Notice the comma-separated values of the <code>flightdelays</code> files in HDFS contain historical data for airline flight delays. The columns in the files match the following schema:
+                <pre>
+Year, Month, DayofMonth, DayOfWeek, DepTime, CRSDepTime, ArrTime, CRSArrTime,
+UniqueCarrier, FlightNum, TailNum, ActualElapsedTime, CRSElapsedTime, AirTime,
+ArrDelay, DepDelay, Origin, Dest, Distance, TaxiIn, TaxiOut, Cancelled, 
+CancellationCode, Diverted, CarrierDelay, WeatherDelay, NASDelay, SecurityDelay,
+LateAircraftDelay                
+                </pre>
+            </li>
+            <li>
+                Write a Pig script that satisfies all of the following criteria:
+                <ul>
+               <li>
+                Load all of the data in <code>/user/horton/flightdelays</code>     
+               </li>
+               <li> 
+                   Remove all rows in the flightdelays data where the <code>DepTime</code> column equals the string "NA".
+            </li>
+            <li>
+                The output should only contain the <code>Year</code>, <code>Month</code>, <code>DayofMonth</code>, <code>DepTime</code>, <code>UniqueCarrier</code>, <code>FlightNum</code>, <code>ArrDelay</code>, <code>Origin</code> and <code>Dest</code>
+            </li>
+            <li>
+                Store the result as comma-separated records in a new directory in HDFS named <code>/user/horton/flightdelays_clean</code>
+            </li>
+            <li>
+                Save the script in a file named <code>flightdelays_clean.pig</code> and save it in the <code>/home/horton/solutions</code> directory on the local filesystem of the client machine.  
+            </li>
+            </ul>
+        </ol>
+
+        
+        <h1>TASK 03</h1>
+        <h2>Analyze Data using Pig</h2>
+        
+        <ol>
+            <li>
+                Write a Pig script saved on the client machine as <code>/home/horton/solutions/cleaned_total.pig</code> that calculates the number of rows in the <code>/user/horton/flightdelays_clean</code> files in HDFS. Store the output of your script in a new directory in HDFS named <code>cleaned_total</code>.
+            </li>
+            <li>
+                The <code>Dest</code> column is the destination airport code where the flight ends. Write a Pig script saved on the client machine as <code>/home/horton/solutions/denver_total.pig</code> that calculates the number of rows in the <code>/user/horton/flightdelays_clean</code> data where the <code>Dest</code> field equals the Denver airport code "DEN". Store the output of your script in a new directory in HDFS named <code>denver_total</code>.
+            </li>
+            <li>
+                The <code>ArrDelay</code> column is the number of minutes that a flight arrived late. Write a Pig script saved on the client machine as <code>/home/horton/solutions/denver_late.pig</code> that counts the number of flights whose <code>Dest</code> is the "DEN" airport that arrived 60 or more mintues late. Store the output of your script in a new directory in HDFS named <code>denver_late</code>
+            </li>
+            </ul>
+        </ol>
+
+        
+        <h1>TASK 04</h1>
+        <h2>Define a Hive Table</h2>
+        
+        <ol>
+            <li>
+                Define a Hive table named <code>flightdelays</code> that matches the data stored in your <code>/user/horton/flightdelays_clean</code> directory in HDFS. The Hive table should satisfy all of the following criteria:
+                <ul>
+                    <li>
+                        An external table with the location set to <code>/user/horton/flightdelays_clean</code>
+                    </li>
+                    <li>
+                        The schema matches the columns <code>Year</code>, <code>Month</code>, <code>DayOfMonth</code>, <code>DepTime</code>, <code>UniqueCarrier</code>, <code>FlightNum</code>, <code>ArrDelay</code>, <code>Origin</code> and <code>Dest</code>
+                    </li>
+                    <li>
+                        The <code>UniqueCarrier</code>, <code>Origin</code> and <code>Dest</code> columns are string types; the other columns are all integers
+                    </li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h1>TASK 05</h1>
+        <h2>Use HCatalog with Pig</h2>
+        
+        <ol>
+            <li>
+                Write a Pig script saved on the client machine as <code>/home/horton/solutions/flightdelays_nonzero.pig</code> that satisfies all of the following criteria:
+                <ul>
+                    <li>
+                        Run the Pig query using Tez as the execution engine
+                    </li>
+                    <li>
+                        Load the data from the <code>flightdelays</code> table in Hive using HCatalog
+                    </li>
+                    <li>
+                        Remove any rows where the <code>arrdelay</code> is less than or equal to 0
+                    </li>
+                    <li>
+                        Order the output by the <code>arrdelay</code> value descending
+                    </li>
+                    <li>
+                        Store the output as three comma-separated files in a new directory in HDFS named <code>/user/horton/flightdelays_nonzero</code>
+                    </li>
+                </ul>
+            </li>
+        </ol>
+
+      
+        
+        <h1>TASK 06</h1>
+        <h2>Analyzing Data with Hive</h2>
+        
+        <ol>
+            <li>
+                Write a Hive query for each of the tasks below. Save the queries in a single text file named <code>/home/horton/solutions/flightdelays.hive</code>:
+                <ul>
+                    <li>
+                       Compute the average <code>arrdelay</code> of flights landing in Denver (<code>dest</code> equals "DEN")
+                    </li>
+                    <li>
+                        Compute the average <code>arrdelay</code> of flights where the <code>origin</code> is LAX and the <code>dest</code> is SFO
+                    </li>
+                    <li>
+                        Determine which <code>dest</code> airport had the highest average <code>arrdelay</code> 
+                    </li>
+                </ul>
+            </li>
+        </ol>
+
+        
+        
+        <h1>TASK 07</h1>
+        <h2>Define and Populate an ORCFile Table</h2>
+        
+        <ol>
+            <li>
+                Define a Hive table named <code>sfo_weather</code> that satisfies all of the following criteria:
+                <ul>
+                    <li>
+                        A Hive-managed table</code>
+                    </li>
+                    <li>
+                        The data is stored in the ORCFile format
+                    </li>
+                    <li>
+                        The table is populated with the records in the <code>/home/horton/datasets/flightdelays/sfo_weather.csv</code> file on the client machine
+                    </li>
+                    <li>
+                        The schema matches the columns in <code>sfo_weather.csv</code> - the first column is a string named <code>station_name</code>, followed by integers for the <code>Year</code>, <code>Month</code>, <code>DayOfMonth</code>, <code>precipitation</code>, <code>temperature_max</code>, and <code>temperature_min</code> 
+                    </li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h1>TASK 08</h1>
+        <h2>Hive Join</h2>
+        
+        <ol>
+            <li>
+                Write a Hive query in a file named <code>/home/horton/solutions/flights_weather.hive</code> that satisfies the following criteria:
+                <ul>
+                    <li>
+                        Use Tez as the execution engine
+                    </li>
+                    <li>
+                        The result of the query is in a new Hive-managed table named <code>flights_weather</code> stored as a textfile
+                    </li>
+                    <li>
+                        Join the <code>flightdelays</code> table with the <code>sfo_weather</code> table where <code>dest</code> or <code>origin</code> equals "SFO" in <code>flightdelays</code>, and the <code>year</code>, <code>month</code> and <code>dayofmonth</code> are equal in the two tables
+                    </li>
+                    <li>
+                        Select all columns from the flightdelays table, and the <code>temperature_max</code> and <code>temperature_min</code> columns from sfo_weather
+                    </li>
+                </ul>
+            </li>
+        </ol>
+        
+        <h1>TASK 09</h1>
+        <h2>Hive Partitioned Tables</h2>
+        
+        <ol>
+            <li>
+                Write a Hive query in a file named <code>/home/horton/solutions/weather_partitioned.hive</code> that satisfies the following criteria:
+                <ul>
+                    <li>
+                        Define a new Hive-managed table named <code>weather_partitioned</code> that has the same schema as the <code>sfo_weather</code> table
+                    </li>
+                    <li>
+                        The table is partitioned on the <code>year</code> and <code>month</code> columns
+                    </li>
+                    <li>
+                        The data is stored in the ORCFile format
+                    </li>
+                    <li>
+                        Insert the records from January, 2008, of the <code>sfo_weather</code> table into the appropriate partition of <code>weather_partitioned</code> 
+                    </li>
+                </ul>
+            </li>
+        </ol>
+        
+
+        <h1>TASK 10</h1>
+        <h2>Sqoop Export</h2>
+        
+        <ol>
+            <li>
+                Put the local file <code>/home/hortonworks/datasets/flightdelays/sfo_weather.csv</code> into HDFS in a new directory named <code>/user/hortonworks/weather/</code>
+            </li>
+            <li>
+                Note there is a MySQL database named <code>flightinfo</code> on the <code>namenode</code> machine. It contains a table named <code>weather</code> with the following schema:
+<pre>
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| station       | varchar(100) | YES  |     | NULL    |       |
+| year          | int(11)      | YES  |     | NULL    |       |
+| month         | int(11)      | YES  |     | NULL    |       |
+| dayofmonth    | int(11)      | YES  |     | NULL    |       |
+| precipitation | int(11)      | YES  |     | NULL    |       |
+| maxtemp       | int(11)      | YES  |     | NULL    |       |
+| mintemp       | int(11)      | YES  |     | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+            </li>
+            <li>
+                Use Sqoop to export the <code>weather</code> directory in HDFS to the <code>weather</code> table in MySQL on port <code>3306</code> on the <code>namenode</code> machine. The username for MySQL is <code>root</code> and the password is <code>hadoop</code>.
+            </li>
+        </ol>
+        
+    </body>
+</html>

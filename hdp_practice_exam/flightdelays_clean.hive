@@ -1,0 +1,14 @@
+create external table if not exists flightdelays (
+	Year int, 
+	Month int, 
+	DayOfMonth int, 
+	DepTime int, 
+	UniqueCarrier string, 
+	FlightNum int, 
+	ArrDelay int, 
+	Origin string, 
+	Dest string
+)
+row format delimited
+fields terminated by ','
+location '/user/horton/flightdelays_clean';

@@ -1,0 +1,18 @@
+create table if not exists weather_partitioned (
+   station_name string,
+   year int,
+   month int,
+   dayofmonth int,
+   precipitation int,
+   temperature_max int,
+   temperature_min int
+)
+partitioned by (pyear int, pmonth int)
+stored as orc;
+ 
+insert overwrite table weather_partitioned partition(pyear=2008, pmonth=1)
+select
+   *
+from sfo_weather
+where year=2008
+   and month=1;

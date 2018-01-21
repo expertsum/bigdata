@@ -1,0 +1,21 @@
+--Task 7:
+--create table sfo_weather_text (station_name string, year int, month int, dayofmonth int, precipitation int, temperature_max int, temperature_min int) row format delimited
+--fields terminated by ',';
+--load data local inpath '/home/horton/datasets/flightdelays/sfo_weather.csv' into table sfo_weather_text;
+--create table sfo_weather stored as Orc as select * from sfo_weather_text;
+
+set hive.execution.engine=tez;
+
+create table flights_weather stored as textfile
+as
+select
+   d.*,
+   w.temperature_max,
+   w.temperature_min
+from flightdelays d
+join sfo_weather w
+   on d.year = w.year
+      and d.month = w.month
+      and d.dayofmonth = w.dayofmonth
+where d.origin = 'SFO'
+   or d.dest = 'SFO';
