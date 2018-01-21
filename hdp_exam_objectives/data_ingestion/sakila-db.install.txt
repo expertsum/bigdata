@@ -1,0 +1,5 @@
+cd sakila-db
+mysql -u root -p
+Enter password: hadoop
+mysql> source sakila-schema.sql;
+mysql> source sakila-data.sql;
