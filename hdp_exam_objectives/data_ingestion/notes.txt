@@ -1,0 +1,3 @@
+sqoop help
+sqoop help import
+hadoop fs -ls /user/maria_dev/sqoop/sakila
