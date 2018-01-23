@@ -1,3 +1,24 @@
 sqoop help
 sqoop help import
 hadoop fs -ls /user/maria_dev/sqoop/sakila
+
+mysql -u root -p -D sakila -e "select * from film_category" --bat | sed 's/\t/,/g' > film_category.csv
+mysql -u root -p -D sakila -e "select * from category" --bat | sed 's/\t/,/g' > category.csv
+
+mysql -u root -p -D sakila -e "describe film_category"
++-------------+----------------------+------+-----+-------------------+-----------------------------+
+| Field       | Type                 | Null | Key | Default           | Extra                       |
++-------------+----------------------+------+-----+-------------------+-----------------------------+
+| film_id     | smallint(5) unsigned | NO   | PRI | NULL              |                             |
+| category_id | tinyint(3) unsigned  | NO   | PRI | NULL              |                             |
+| last_update | timestamp            | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+----------------------+------+-----+-------------------+-----------------------------+
+
+mysql -u root -p -D sakila -e "describe category"
++-------------+---------------------+------+-----+-------------------+-----------------------------+
+| Field       | Type                | Null | Key | Default           | Extra                       |
++-------------+---------------------+------+-----+-------------------+-----------------------------+
+| category_id | tinyint(3) unsigned | NO   | PRI | NULL              | auto_increment              |
+| name        | varchar(25)         | NO   |     | NULL              |                             |
+| last_update | timestamp           | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+---------------------+------+-----+-------------------+-----------------------------+
