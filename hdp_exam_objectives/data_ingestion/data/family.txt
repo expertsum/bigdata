@@ -1,7 +1,8 @@
 juan,43
 maria,39
 ricardo,5
-pepe,8
+pepe,
 rosa,41
 javier,79
 alfonso,65
+chencha,
