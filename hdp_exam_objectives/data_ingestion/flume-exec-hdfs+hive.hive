@@ -1,0 +1,11 @@
+use default;
+
+drop table if exists family;
+
+create table family (
+   name string,
+   age int
+)
+clustered by(name) into 3 buckets
+stored as orc
+tblproperties("transactional"="true");
