@@ -1,0 +1,15 @@
+create database if not exists sakila;
+
+create table if not exists sakila.category (
+	category_id int,
+	name string,
+	last_update timestamp
+)
+stored as orc;
+
+create table if not exists sakila.film_category (
+        category_id int,
+	film_id int,
+        last_update timestamp
+)
+stored as orc;
