@@ -4,7 +4,7 @@ fs -copyFromLocal /root/bigdata/hdp_exam_objectives/data_ingestion/data/category
 fs -copyFromLocal /root/bigdata/hdp_exam_objectives/data_ingestion/data/film_category.csv /user/maria_dev/pig/sakila/film_category.csv;
 
 
--- Load the sakila.category table in Hive
+-- Load the category.csv data into Hive
 category = LOAD '/user/maria_dev/pig/sakila/category.csv' USING PigStorage(',') AS (
 		category_id:int, name:chararray, last_update:chararray
 	   );
@@ -14,7 +14,7 @@ category_datetime = FOREACH category GENERATE category_id, name, ToDate(last_upd
 STORE category_datetime INTO 'sakila.category' USING org.apache.hive.hcatalog.pig.HCatStorer();
 
 
--- Load the sakila.film_category table in Hive
+-- Load the film_category.csv data into Hive
 film_category = LOAD '/user/maria_dev/pig/sakila/film_category.csv' USING PigStorage(',') AS (
                         film_id:int, category_id:int, last_update:chararray
                 );
