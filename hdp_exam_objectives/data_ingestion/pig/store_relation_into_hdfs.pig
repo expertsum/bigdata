@@ -1,4 +1,4 @@
-film_actor = LOAD 'film_actor' USING org.apache.hive.hcatalog.pig.HCatLoader();
+film_actor = LOAD 'sakila.film_actor' USING org.apache.hive.hcatalog.pig.HCatLoader();
 
 STORE film_actor INTO '/user/maria_dev/pig/sakila/film_actor' USING PigStorage(',');
 

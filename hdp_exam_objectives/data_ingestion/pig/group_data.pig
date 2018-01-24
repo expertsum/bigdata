@@ -2,7 +2,7 @@ actor = LOAD '/user/maria_dev/sqoop/sakila/actor' USING PigStorage(',') AS (
 		actor_id:int, first_name:chararray, last_name:chararray, last_update
 	);
 
-film_actor = LOAD 'film_actor' USING org.apache.hive.hcatalog.pig.HCatLoader();
+film_actor = LOAD 'sakila.film_actor' USING org.apache.hive.hcatalog.pig.HCatLoader();
 
 joined = JOIN actor BY actor_id, film_actor BY actor_id;
 
