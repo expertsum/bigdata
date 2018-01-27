@@ -1,7 +1,7 @@
 -- Load CSV files into HDFS
 fs -rm /user/maria_dev/pig/sakila/*.csv;
-fs -copyFromLocal /root/bigdata/hdp_exam_objectives/data_ingestion/data/category.csv /user/maria_dev/pig/sakila/category.csv;
-fs -copyFromLocal /root/bigdata/hdp_exam_objectives/data_ingestion/data/film_category.csv /user/maria_dev/pig/sakila/film_category.csv;
+fs -copyFromLocal /root/bigdata/hdp_exam_objectives/data/category.csv /user/maria_dev/pig/sakila/category.csv;
+fs -copyFromLocal /root/bigdata/hdp_exam_objectives/data/film_category.csv /user/maria_dev/pig/sakila/film_category.csv;
 
 
 -- Load the category.csv data into Hive

@@ -1,7 +1,3 @@
-sqoop help
-sqoop help import
-hadoop fs -ls /user/maria_dev/sqoop/sakila
-
 mysql -u root -p -D sakila -e "select * from film_category" --bat | sed 's/\t/,/g' > film_category.csv
 mysql -u root -p -D sakila -e "select * from category" --bat | sed 's/\t/,/g' > category.csv
 
