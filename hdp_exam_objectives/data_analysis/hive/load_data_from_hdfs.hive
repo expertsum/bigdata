@@ -1,0 +1,12 @@
+drop table if exists sakila.film_actor_hdfs;
+create table sakila.film_actor_hdfs (
+	actor_id int,
+	film_id int,
+	last_update timestamp
+)
+row format delimited
+fields terminated by ','
+stored as textfile;
+
+load data inpath '/user/maria_dev/pig/sakila/film_actor'
+overwrite into table sakila.film_actor_hdfs;

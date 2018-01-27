@@ -1,0 +1,12 @@
+drop table if exists sakila.category_local;
+create table sakila.category_local (
+	category_id int,
+	name string,
+	last_update timestamp
+)
+row format delimited
+fields terminated by ','
+stored as textfile;
+
+load data local inpath '/root/bigdata/hdp_exam_objectives/data/category.csv'
+overwrite into table sakila.category_local;
