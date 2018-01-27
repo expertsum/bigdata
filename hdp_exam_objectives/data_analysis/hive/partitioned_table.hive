@@ -1,0 +1,31 @@
+drop table if exists sakila.film_partitioned;
+create external table sakila.film_partitioned (
+    film_id int,
+    title varchar(255),
+   	release_year int,
+	language_id tinyint,
+	length smallint,
+    last_udpate timestamp
+)
+partitioned by (rating varchar(10))
+stored as orc;
+
+insert overwrite table sakila.film_partitioned partition(rating='G')
+select film_id, title, year(release_year), language_id, length, last_update 
+from sakila.film where rating='G';
+
+insert overwrite table sakila.film_partitioned partition(rating='NC-17')
+select film_id, title, year(release_year), language_id, length, last_update 
+from sakila.film where rating='NC-17';
+
+insert overwrite table sakila.film_partitioned partition(rating='PG')
+select film_id, title, year(release_year), language_id, length, last_update 
+from sakila.film where rating='PG';
+
+insert overwrite table sakila.film_partitioned partition(rating='PG-13')
+select film_id, title, year(release_year), language_id, length, last_update 
+from sakila.film where rating='PG-13';
+
+insert overwrite table sakila.film_partitioned partition(rating='R')
+select film_id, title, year(release_year), language_id, length, last_update 
+from sakila.film where rating='R';

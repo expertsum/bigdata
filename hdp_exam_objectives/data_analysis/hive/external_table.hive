@@ -1,0 +1,27 @@
+drop table if exists sakila.actor;
+create external table sakila.actor (
+	actor_id int,
+	first_name varchar(45),
+	last_name varchar(45),
+	last_update timestamp
+)
+row format delimited
+fields terminated by ','
+stored as textfile
+location '/user/maria_dev/sqoop/sakila/actor';
+
+drop table if exists sakila.film;
+create external table sakila.film (
+    film_id int,
+    title varchar(255),
+   	release_year date,
+	language_id tinyint,
+	length smallint,
+	rating varchar(10), 
+    last_update timestamp
+)
+row format delimited
+fields terminated by ','
+stored as textfile
+location '/user/maria_dev/sqoop/sakila/film';
+
