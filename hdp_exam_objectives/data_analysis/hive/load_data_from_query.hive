@@ -1,0 +1,15 @@
+drop table if exists sakila.comedy_films;
+create table sakila.comedy_films
+stored as orc
+as
+select
+	f.film_id,
+	f.title,
+	f.release_year,
+	c.name as category
+from sakila.film_partitioned f
+join sakila.film_category fc
+	on f.film_id = fc.film_id
+join sakila.category_local c
+	on fc.category_id = c.category_id
+where c.name = 'Comedy';

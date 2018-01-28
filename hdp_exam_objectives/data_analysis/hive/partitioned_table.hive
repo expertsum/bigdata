@@ -1,5 +1,5 @@
 drop table if exists sakila.film_partitioned;
-create external table sakila.film_partitioned (
+create table sakila.film_partitioned (
     film_id int,
     title varchar(255),
    	release_year int,

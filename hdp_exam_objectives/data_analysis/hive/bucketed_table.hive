@@ -1,0 +1,34 @@
+set hive.enforce.bucketing = true;
+
+drop table if exists sakila.film_bucketed;
+create table sakila.film_bucketed (
+    film_id int,
+    title varchar(255),
+	release_year int,
+	language_id tinyint,
+	length smallint,
+    last_udpate timestamp
+)
+partitioned by (rating varchar(10))
+clustered by(film_id) into 4 buckets
+stored as orc;
+
+insert overwrite table sakila.film_bucketed partition(rating='G')
+select film_id, title, year(release_year), language_id, length, last_update
+from sakila.film where rating='G';
+
+insert overwrite table sakila.film_bucketed partition(rating='NC-17')
+select film_id, title, year(release_year), language_id, length, last_update
+from sakila.film where rating='NC-17';
+
+insert overwrite table sakila.film_bucketed partition(rating='PG')
+select film_id, title, year(release_year), language_id, length, last_update
+from sakila.film where rating='PG';
+
+insert overwrite table sakila.film_bucketed partition(rating='PG-13')
+select film_id, title, year(release_year), language_id, length, last_update
+from sakila.film where rating='PG-13';
+
+insert overwrite table sakila.film_bucketed partition(rating='R')
+select film_id, title, year(release_year), language_id, length, last_update
+from sakila.film where rating='R';
