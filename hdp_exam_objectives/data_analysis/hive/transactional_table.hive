@@ -1,0 +1,41 @@
+set hive.enforce.bucketing = true;
+
+drop table if exists sakila.film_transactional;
+create table sakila.film_transactional (
+    film_id int,
+    title varchar(255),
+	release_year int,
+	language_id tinyint,
+	length smallint,
+    last_udpate timestamp
+)
+partitioned by (rating varchar(10))
+clustered by(film_id) into 4 buckets
+stored as orc tblproperties('transactional'='true');
+
+insert into table sakila.film_transactional partition(rating='G')
+select film_id, title, year(release_year), language_id, length, last_update
+from sakila.film where rating='G';
+
+insert into table sakila.film_transactional partition(rating='NC-17')
+select film_id, title, year(release_year), language_id, length, last_update
+from sakila.film where rating='NC-17';
+
+insert into table sakila.film_transactional partition(rating='PG')
+select film_id, title, year(release_year), language_id, length, last_update
+from sakila.film where rating='PG';
+
+insert into table sakila.film_transactional partition(rating='PG-13')
+select film_id, title, year(release_year), language_id, length, last_update
+from sakila.film where rating='PG-13';
+
+insert into table sakila.film_transactional partition(rating='R')
+select film_id, title, year(release_year), language_id, length, last_update
+from sakila.film where rating='R';
+
+update sakila.film_transactional
+set length = length * 2
+where rating='R';
+
+delete from sakila.film_transactional
+where film_id=996;
