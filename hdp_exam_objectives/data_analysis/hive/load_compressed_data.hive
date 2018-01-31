@@ -1,0 +1,27 @@
+drop table if exists sakila.category_gzip;
+create table sakila.category_gzip (
+	category_id int,
+	name string,
+	last_update timestamp
+)
+row format delimited
+fields terminated by ','
+stored as textfile;
+
+load data local inpath '/root/bigdata/hdp_exam_objectives/data/category.csv.gz'
+into table sakila.category_gzip;
+
+
+drop table if exists sakila.category_sequence;
+create table sakila.category_sequence (
+	category_id int,
+	name string,
+	last_update timestamp
+)
+stored as sequencefile;
+
+set hive.exec.compress.output=true;
+set io.seqfile.compression.type=BLOCK;
+
+insert overwrite table sakila.category_sequence
+select * from sakila.category_gzip;
