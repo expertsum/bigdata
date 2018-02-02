@@ -1,0 +1,5 @@
+set hive.optimize.sampling.orderby=true;
+set hive.optimize.sampling.orderby.number=1000;
+set hive.optimize.sampling.orderby.percent=0.1;
+
+select * from sakila.film_category order by category_id, film_id;;
