@@ -1,0 +1,29 @@
+set hive.execution.engine=tez;
+
+select
+	a.first_name,
+	a.last_name,
+	c.name as category_name,
+	f.rating,
+	count(*) as film_count
+from sakila.film f
+join sakila.film_actor fa
+	on f.film_id = fa.film_id
+join sakila.actor a
+	on fa.actor_id = a.actor_id
+join sakila.film_category fc
+	on f.film_id = fc.film_id
+join sakila.category c
+	on fc.category_id = c.category_id
+group by
+	a.first_name,
+	a.last_name,
+	c.name,
+	f.rating
+order by
+	film_count desc,
+	c.name asc,
+	f.rating asc,
+	a.first_name asc,
+	a.last_name asc
+limit 10;
