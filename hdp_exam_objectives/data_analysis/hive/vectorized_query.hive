@@ -1,0 +1,6 @@
+-- https://cwiki.apache.org/confluence/display/Hive/Vectorized+Query+Execution
+
+set hive.vectorized.execution.enabled=true;
+set hive.execution.engine=mr;
+
+explain select count(*) from sakila.film_transactional;
