@@ -18,7 +18,6 @@ cd /root/bigdata/airline_online_performance/data
 #bzip2 -d 2008.csv.bz2
 
 hdfs dfs -mkdir -p /user/maria_dev/airline/flights
-hdfs dfs -mkdir -p /user/maria_dev/airline/flights/output
 hdfs dfs -mkdir -p /user/maria_dev/airline/airports
 hdfs dfs -mkdir -p /user/maria_dev/airline/carriers
 hdfs dfs -mkdir -p /user/maria_dev/airline/plane_infos

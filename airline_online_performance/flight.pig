@@ -1,4 +1,4 @@
-raw_data = LOAD '/user/cloudera/rawdata/airline/flights' USING PigStorage(',') AS 
+raw_data = LOAD '/user/maria_dev/airline/flights/*.csv' USING PigStorage(',') AS
 	(year:chararray,month:chararray,dayOfMonth:chararray,dayOfWeek:chararray,DepTime:chararray,
 	CRSDepTime:chararray,ArrTime:chararray,CRSArrTime:chararray,UniqueCarrier:chararray,FlightNum:chararray,
 	TailNum:chararray,ActualElapsedTime:chararray,CRSElapsedTime:chararray,AirTime:chararray,ArrDelay:chararray,
@@ -35,5 +35,5 @@ rel_data = FOREACH headless_data GENERATE year, month, dayOfMonth, dayOfWeek,
 	(SecurityDelay == 'NA' ? '' : SecurityDelay) AS SecurityDelay,
 	(LateAircraftDelay == 'NA' ? '' : LateAircraftDelay) AS LateAircraftDelay;
 
-STORE rel_data INTO '/user/cloudera/output/airline/flight' Using PigStorage(',');
-#STORE rel_date INTO 'airline.txt_flight' USING org.apache.hive.hcatalog.pig.HCatStorer();
+STORE rel_data INTO '/user/maria_dev/airline/flights/output' Using PigStorage(',');
+--STORE rel_date INTO 'airline.txt_flight' USING org.apache.hive.hcatalog.pig.HCatStorer();
