@@ -1,15 +1,15 @@
 use airline;
 
 -- create external table for carriers
-create external table pq_carriers (
+create external table pq_carrier (
     cdde varchar(4), 
     description varchar(30)
 ) 
 stored as parquet
-location '/user/cloudera/output/airline/carriers';
+location '/user/maria_dev/airline/parquet/carriers';
 
-insert overwrite table pq_carriers 
-select * from carriers where cdde != 'Code';
+insert overwrite table pq_carrier
+select * from carrier where cdde != 'Code';
 
 
 -- create external table for plane information
@@ -24,14 +24,14 @@ create external table pq_plane_info (
     pyear int
 )  
 stored as parquet
-location '/user/cloudera/output/airline/plane_infos';
+location '/user/maria_dev/airline/parquet/plane_infos';
 
 
 insert overwrite table pq_plane_info
 select * from plane_info where tailnum != 'tailnum';
 
 -- create external table for airports
-create external table pq_airports (
+create external table pq_airport (
     iata string, 
     airport string, 
     city string,
@@ -41,10 +41,10 @@ create external table pq_airports (
     geolong float
 )
 stored as parquet
-location '/user/cloudera/output/airline/airports';
+location '/user/maria_dev/airline/parquet/airports';
 
-insert overwrite table pq_airports
-select * from airports where iata != 'iata';
+insert overwrite table pq_airport
+select * from airport where iata != 'iata';
 
 -- create external table for flight
 -- run this from impala and check the number of output files created on hdfs
@@ -57,7 +57,7 @@ create external table pq_flight
     cancelled string, cancellationcode string, diverted string, carrierdelay smallint,
     weatherdelay smallint, nasdelay smallint, securitydelay smallint, lateaircraftdelay smallint)
 stored as parquet
-location '/user/cloudera/output/airline/pq_flight';
+location '/user/maria_dev/airline/parquet/flights';
 
 insert overwrite table pq_flight 
-select * from txt_flight;
+select * from flight;
