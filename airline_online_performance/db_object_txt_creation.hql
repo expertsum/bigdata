@@ -2,7 +2,7 @@ create database airline;
 
 use airline;
 
-create external table txt_flight 
+create external table flight
 	(year smallint,month tinyint,dayofmonth tinyint,dayofweek tinyint,
 	deptime smallint, crsdeptime smallint, arrtime smallint, crsarrtime smallint, 
 	uniquecarrier string, flightnum string, tailnum string, actualelapsedtime smallint,
@@ -12,10 +12,10 @@ create external table txt_flight
 	weatherdelay smallint, nasdelay smallint, securitydelay smallint, lateaircraftdelay smallint)
 row format delimited
 fields terminated by ','
-location '/user/cloudera/output/airline/flight';
+location '/user/maria_dev/airline/flights/output';
 
 -- create external table for airports
-create external table txt_airports (
+create external table airport (
     iata string, 
     airport string, 
     city string,
@@ -31,10 +31,10 @@ with serdeproperties (
    "escapeChar"    = "\\"
 )  
 stored as textfile
-location '/user/cloudera/rawdata/airline/airports';
+location '/user/maria_dev/airline/airports';
 
 -- create external table for carriers
-create external table txt_carriers (
+create external table carrier (
     cdde varchar(4), 
     description varchar(30)
 )
@@ -45,10 +45,10 @@ with serdeproperties (
    "escapeChar"    = "\\"
 )  
 stored as textfile
-location '/user/cloudera/rawdata/airline/carriers';
+location '/user/maria_dev/airline/carriers';
 
 -- create external table for plane information
-create external table txt_plane_info (
+create external table plane_info (
     tailnum varchar(4), 
     type varchar(30),
     manufacturer string,
@@ -65,4 +65,4 @@ with serdeproperties (
    "escapeChar"    = "\\"
 )  
 stored as textfile
-location '/user/cloudera/rawdata/airline/plane_infos';
+location '/user/maria_dev/airline/plane_infos';
