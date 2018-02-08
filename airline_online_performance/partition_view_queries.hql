@@ -20,7 +20,7 @@ create external table pq_flight_part
     weatherdelay smallint, nasdelay smallint, securitydelay smallint, lateaircraftdelay smallint)
 partitioned by (year smallint)
 stored as parquet
-location '/user/cloudera/output/airline/pq_flight_part';
+location '/user/maria_dev/airline/parquet/flights_part';
 
 
 alter table pq_flight_part add partition(year=2003);
@@ -50,7 +50,7 @@ month, dayofmonth,dayofweek, deptime, crsdeptime, arrtime, crsarrtime,
     origin, dest, distance, taxiin, taxiout,
     cancelled, cancellationcode, diverted, carrierdelay,
     weatherdelay, nasdelay, securitydelay, lateaircraftdelay, year
-    from pq_flight where year != 2003;
+    from pq_flight where year != 2004;
 
 
 create view v_flights_denom as 
@@ -78,14 +78,14 @@ select year,month, cast(concat(cast(year as string), cast(month as string)) as s
     if ((pf.year - cast(substr(issue_date, 7,4) as int) < 0), 0, pf.year - cast(substr(issue_date, 7,4) as int)) age_of_plane, 
     ppi.model, ppi.status, ppi.aircraft_type, ppi.pyear
     from pq_flight_part pf
-left join pq_carriers pc on pc.cdde = pf.uniquecarrier
+left join pq_carrier pc on pc.cdde = pf.uniquecarrier
 left join pq_plane_info ppi on ppi.tailnum = pf.tailnum
-left join pq_airports pao on pao.iata = pf.origin
-left join pq_airports pad on pad.iata = pf.dest;
+left join pq_airport pao on pao.iata = pf.origin
+left join pq_airport pad on pad.iata = pf.dest;
 
 
-create view v_flight_2003 as 
+create view v_flights_2003 as
 select * from v_flights_denom where year = 2003;
 
-create view v_flight_2003_2005 as 
+create view v_flights_2003_2005 as
 select * from v_flights_denom where year in (2003,2004,2005);
