@@ -7,7 +7,7 @@ spark = SparkSession \
 	.getOrCreate()
 
 input_file = 'file:///root/bigdata/hdp_spark_practice/data/flightdelays.csv'
-output_file = 'hdfs:///user/maria_dev/flights/flightdelays_clean'
+output_file = 'hdfs:///user/maria_dev/flights/flightdelays_clean_df'
 
 flight_delays = spark.read.csv(input_file, header=True, inferSchema=True)
 flight_delays \
