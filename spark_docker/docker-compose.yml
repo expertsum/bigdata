@@ -1,0 +1,67 @@
+version: "3.5"
+services:
+
+  spark-base:
+    container_name: spark-base
+    build: ./spark-base
+    image: spark-base:latest
+
+  spark-driver:
+    depends_on:
+      - spark-base
+    container_name: spark-driver
+    build: ./spark-driver
+    image: spark-driver:latest
+    ports:
+      - "4040:4040"
+      - "8080:8080"
+    networks:
+      - spark-cluster 
+    volumes:
+      - ./events:/tmp/spark-events
+
+  spark-worker:
+    depends_on:
+      - spark-driver
+    build: ./spark-worker
+    image: spark-worker:latest
+    expose:
+      - "8081"
+    ports: 
+      - "0:8081"
+    command: ["/opt/spark/sbin/start-slave.sh", "spark://spark-driver:7077"]
+    networks:
+      - spark-cluster
+    volumes:
+      - ./events:/tmp/spark-events
+
+  spark-history:
+    depends_on:
+      - spark-driver
+    container_name: spark-history
+    build: ./spark-history
+    image: spark-history:latest
+    ports:
+      - "18080:18080"
+    networks:
+      - spark-cluster
+    volumes:
+      - ./events:/tmp/spark-events
+
+  spark-notebook:
+    depends_on:
+      - spark-driver
+    container_name: spark-notebook
+    image: jupyter/all-spark-notebook
+    ports:
+      - "8888:8888"
+    networks:
+      - spark-cluster
+    volumes:
+      - ./work:/home/jovyan/work
+      - ./events:/tmp/spark-events
+    command: ["start-notebook.sh", "--NotebookApp.password='sha1:9fd15fe4a4ce:0b0a713b2cc29caabb2228971971bae993cb86d2'"]
+
+networks:
+  spark-cluster:
+    name: spark-cluster

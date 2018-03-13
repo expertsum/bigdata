@@ -1,3 +1,5 @@
 airline_online_performance/data
 hdp_spark_practice/spark-warehouse
-spark_docker/image/spark-2.3.0-bin-hadoop2.7
+spark_docker/spark-base/spark-bin
+spark_docker/events
+spark_docker/work/.ipynb_checkpoints
