@@ -15,6 +15,8 @@ services:
       - "4040:4040"
       - "8080:8080"
     command: ["/opt/spark/sbin/start-master.sh"]
+    environment:
+      - SPARK_PUBLIC_DNS=localhost
     networks:
       - spark-cluster 
     volumes:
@@ -29,6 +31,8 @@ services:
     ports: 
       - "0:8081"
     command: ["/opt/spark/sbin/start-slave.sh", "spark://spark-master:7077"]
+    environment:
+      - SPARK_PUBLIC_DNS=localhost
     networks:
       - spark-cluster
     volumes:
@@ -42,6 +46,8 @@ services:
     ports:
       - "18080:18080"
     command: ["/opt/spark/sbin/start-history-server.sh"]
+    environment:
+      - SPARK_PUBLIC_DNS=localhost
     networks:
       - spark-cluster
     volumes:
