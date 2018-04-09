@@ -1,0 +1,26 @@
+apiVersion: apps/v1beta2 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: spark-worker
+spec:
+  selector:
+    matchLabels:
+      app: spark-worker
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: spark-worker
+    spec:
+      containers:
+      - name: spark-worker
+        image: gcr.io/spark-cluster-k8s/spark-base:latest  # or just image: redis
+        command: ["/opt/spark/sbin/start-slave.sh"]
+        args: ["spark://spark-master:7077", "-c", "1", "-m", "1G", "-p", "7078"]
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 1Gi
+        ports:
+        - containerPort: 8081
+        - containerPort: 7078

@@ -1,0 +1,26 @@
+apiVersion: apps/v1beta2 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: spark-master
+spec:
+  selector:
+    matchLabels:
+      app: spark-master
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: spark-master
+    spec:
+      containers:
+      - name: spark-master
+        image: gcr.io/spark-cluster-k8s/spark-base:latest  # or just image: redis
+        command: ["/opt/spark/sbin/start-master.sh"]
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 1Gi
+        ports:
+        - containerPort: 4040
+        - containerPort: 7077
+        - containerPort: 8080
