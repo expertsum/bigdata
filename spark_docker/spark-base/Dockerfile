@@ -18,10 +18,10 @@ RUN set -ex && \
     ln -sv /usr/bin/python3 /usr/bin/python && \
     chgrp root /etc/passwd && chmod ug+rw /etc/passwd
 
+COPY ./conf $SPARK_HOME/conf
 COPY $SPARK_BIN/jars $SPARK_HOME/jars
 COPY $SPARK_BIN/bin $SPARK_HOME/bin
 COPY $SPARK_BIN/sbin $SPARK_HOME/sbin
-COPY $SPARK_BIN/conf $SPARK_HOME/conf
 COPY $SPARK_BIN/examples $SPARK_HOME/examples
 COPY $SPARK_BIN/data $SPARK_HOME/data
 COPY $SPARK_BIN/python $SPARK_HOME/python

@@ -5,13 +5,17 @@ metadata:
   labels:
     app: spark-master
 spec:
-  type: LoadBalancer
+  clusterIP: None
   ports:
-  - name: webui
-    port: 8080
-    targetPort: 8080
+  - name: applicationui
+    port: 4040
   - name: master
     port: 7077
-    targetPort: 7077
+  - name: webui
+    port: 8080
+  - name: driver
+    port: 9077
+  - name: blockmanager
+    port: 9087
   selector:
     app: spark-master

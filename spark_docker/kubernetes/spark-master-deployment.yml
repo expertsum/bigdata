@@ -1,26 +1,28 @@
 apiVersion: apps/v1beta2 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
-  name: spark-worker
+  name: spark-master
 spec:
   selector:
     matchLabels:
-      app: spark-worker
+      app: spark-master
   replicas: 1
   template:
     metadata:
       labels:
-        app: spark-worker
+        app: spark-master
     spec:
       containers:
-      - name: spark-worker
+      - name: spark-master
         image: gcr.io/spark-cluster-k8s/spark-base:latest  # or just image: redis
-        command: ["/opt/spark/sbin/start-slave.sh"]
-        args: ["spark://spark-master:7077", "-c", "1", "-m", "1G", "-p", "7078"]
+        command: ["/opt/spark/sbin/start-master.sh"]
         resources:
           requests:
-            cpu: 1000m
+            cpu: 500m
             memory: 1Gi
         ports:
-        - containerPort: 8081
-        - containerPort: 7078
+        - containerPort: 4040
+        - containerPort: 7077
+        - containerPort: 8080
+        - containerPort: 9077
+        - containerPort: 9087
