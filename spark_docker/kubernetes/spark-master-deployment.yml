@@ -24,5 +24,3 @@ spec:
         - containerPort: 4040
         - containerPort: 7077
         - containerPort: 8080
-        - containerPort: 9077
-        - containerPort: 9087
